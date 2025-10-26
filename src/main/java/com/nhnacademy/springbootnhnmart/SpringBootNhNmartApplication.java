@@ -21,7 +21,10 @@ public class SpringBootNhNmartApplication {
         File directory = new File(uploadDirectory);
         if (!directory.exists()) {
             System.out.println("업로드 디렉토리 생성 "+uploadDirectory);
-            directory.mkdirs();
+            boolean created = directory.mkdirs();
+            if (!created) {
+                throw new IllegalStateException("업로드 디렉토리 생성 실패: " + uploadDirectory);
+            }
         }
     }
 

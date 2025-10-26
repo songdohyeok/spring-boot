@@ -20,7 +20,7 @@ public class InquiryRepositoryImpl implements InquiryRepository {
     }
 
     @Override
-    public Inquiry save(String title, String content, String customerId, Inquiry.Category category, List<String> attachmentPaths) {
+    public void save(String title, String content, String customerId, Inquiry.Category category, List<String> attachmentPaths) {
         Inquiry inquiry = new Inquiry();
         inquiry.setId(counter.incrementAndGet());
         inquiry.setTitle(title);
@@ -32,7 +32,6 @@ public class InquiryRepositoryImpl implements InquiryRepository {
 
         inquiryMap.put(inquiry.getId(), inquiry);
 
-        return inquiry;
     }
 
     @Override

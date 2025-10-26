@@ -9,7 +9,7 @@ public interface InquiryRepository {
     Inquiry findById(Long id);
 
     // 게시글 작성
-    Inquiry save(String title, String content, String customerId, Inquiry.Category category, List<String> attachmentPaths);
+    void save(String title, String content, String customerId, Inquiry.Category category, List<String> attachmentPaths);
 
     // 본인이 작성한 문의 리스트 (손님용)
     List<Inquiry> findByCustomerId(String customerId);
