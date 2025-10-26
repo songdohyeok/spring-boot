@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>문의하기</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; }
+        th { background-color: #f4f4f4; }
+        .search-form { margin: 10px 0; }
+        .action-links { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <h2>고객 페이지 - 내 문의 목록</h2>
+
+    <div class = "action-links">
+        <a href="/cs/inquiry">문의하기</a>
+        <a href="/cs/logout">로그아웃</a>
+    </div>
+
+    <form class="search-form" action="/cs" method="get">
+        <select name="category">
+            <option value="">-- 전체 카테고리 --</option>
+            <option th:each="cat : ${T(com.nhnacademy.springbootnhnmart.domain.Inquiry.Category).values()}"
+                    th:value="${cat}"
+                    th:text="${cat.label}">
+            </option>
+        </select>
+        <button type="submit">검색</button>
+    </form>
+
+    <div th:if="${inquiryList.isEmpty()}">
+        <p>문의 내역이 없습니다.</p>
+    </div>
+
+    <table th:unless="${inquiryList.isEmpty()}">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>카테고리</th>
+            <th>제목</th>
+            <th>작성일</th>
+            <th>답변 상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="inquiry : ${inquiryList}">
+            <td th:text="${inquiry.id}"></td>
+            <td th:text="${inquiry.category.label}"></td>
+
+            <td>
+                <a th:href="@{/cs/inquiry/{id}(id=${inquiry.id})}"
+                   th:text="${inquiry.title}">
+                </a>
+            </td>
+
+            <td th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd')}"></td>
+            <td th:text="${inquiry.answerContent == null ? '답변 대기' : '답변 완료'}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>문의 답변하기</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+<h2>문의 답변하기</h2>
+
+<div th:object="${inquiry}">
+    <h3>고객 문의 상세</h3>
+    <p><span>작성자:</span> <span th:text="*{customerId}"></span></p>
+    <p><span>카테고리:</span> <span th:text="*{category.label}"></span></p>
+    <p><span>제목:</span> <span th:text="*{title}"></span></p>
+    <p>
+        <span>내용:</span>
+    <blockquote th:text="*{content}"
+                style="display:inline-block; vertical-align:top;
+                       background:#f7f7f7; border:1px solid #ddd;
+                       padding:10px; margin:0 0 0 8px; white-space:pre-wrap;"></blockquote>
+    </p>
+
+
+    <div th:unless="*{attachmentPaths == null or attachmentPaths.isEmpty()}">
+        <span>첨부 파일:</span> <div th:each="filename : *{attachmentPaths}">
+        <a th:href="@{/uploads/{name}(name=${filename})}" target="_blank">
+            <img th:src="@{/uploads/{name}(name=${filename})}"
+                 alt="첨부 이미지" width="300">
+        </a>
+    </div>
+    </div>
+</div>
+
+<hr>
+
+<form action="/cs/admin/answer" method="post" th:object="${answerRequest}">
+
+    <input type="hidden" th:field="*{id}">
+
+    <div>
+        <label for="answerContent">답변 내용:</label><br>
+        <textarea id="answerContent" rows="10" cols="50" th:field="*{answerContent}"></textarea>
+
+        <div class="error-message"
+             th:if="${#fields.hasErrors('answerContent')}"
+             th:errors="*{answerContent}"></div>
+    </div>
+
+    <br>
+
+    <div>
+        <button type="submit">답변하기</button>
+        <button type="button" onclick="location.href='/cs/admin'">취소</button>
+    </div>
+</form>
+</body>
+</html>

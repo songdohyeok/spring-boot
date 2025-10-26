@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 페이지</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; }
+        th { background-color: #f4f4f4; }
+        .action-links { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<h2>관리자 페이지 - 답변 대기 문의 목록</h2>
+
+<div class="action-links">
+    <a href="/cs/logout">로그아웃</a>
+</div>
+
+<div th:if="${inquiryList.isEmpty()}">
+    <p>답변 대기 중인 문의가 없습니다.</p>
+</div>
+
+<table th:unless="${inquiryList.isEmpty()}">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>카테고리</th>
+        <th>제목</th>
+        <th>작성자 ID</th>
+        <th>작성일</th>
+        <th>답변</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="inquiry : ${inquiryList}">
+        <td th:text="${inquiry.id}"></td>
+        <td th:text="${inquiry.category.label}"></td>
+        <td th:text="${inquiry.title}"></td>
+        <td th:text="${inquiry.customerId}"></td>
+        <td th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd')}"></td>
+        <td>
+            <a th:href="@{/cs/admin/answer(id=${inquiry.id})}">답변하기</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>문의 상세 내역</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        .action-links { margin-bottom: 15px; }
+        .content-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            background-color: #f9f9f9;
+            margin-bottom: 15px;
+        }
+        .content-box pre {
+            background-color: white;
+            border: 1px solid #eee;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+        .answer-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+<h2>문의 상세 내역</h2>
+
+<div th:object="${inquiry}">
+    <div class="content-box">
+        <h3>문의 내용</h3>
+        <p><strong>카테고리:</strong> <span th:text="*{category.label}"></span></p>
+        <p><strong>제목:</strong> <span th:text="*{title}"></span></p>
+        <p><strong>작성일:</strong> <span th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+        <p><strong>내용:</strong></p>
+
+        <pre th:text="*{content}"></pre>
+
+        <div th:unless="*{attachmentPaths == null or attachmentPaths.isEmpty()}">
+            <strong>첨부 파일:</strong>
+            <div th:each="filename : *{attachmentPaths}">
+                <a th:href="@{/uploads/{name}(name=${filename})}" target="_blank">
+                    <img th:src="@{/uploads/{name}(name=${filename})}"
+                         alt="첨부 이미지" style="max-width: 400px; margin-top: 5px;">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div th:if="*{answerContent != null}" class="answer-box">
+        <h3>관리자 답변</h3>
+        <p><strong>답변 담당자:</strong> <span th:text="*{answerAdminId}"></span></p>
+        <p><strong>답변일:</strong> <span th:text="${#temporals.format(inquiry.answeredAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+        <p><strong>답변 내용:</strong></p>
+        <pre th:text="*{answerContent}"></pre>
+    </div>
+
+</div> <br>
+<div class="action-links">
+    <a href="/cs">목록으로 돌아가기</a>
+</div>
+</body>
+</html>
